@@ -39,7 +39,6 @@ public class JWTUtils {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis()+200*60*60*10))
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
-
     }
     public Boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
