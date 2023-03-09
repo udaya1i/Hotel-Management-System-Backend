@@ -24,4 +24,16 @@ public class UserRestImpl implements UserRest {
         }
        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @Override
+    public ResponseEntity<String> signin(Map<String, String> requestMap) {
+        try{
+            userService.login(requestMap);
+
+        }catch (Exception ex){
+        ex.printStackTrace();
+        }
+        return HMSUtilits.getResponseEntity(HMSConstant.something_went_wrong,HttpStatus.INTERNAL_SERVER_ERROR);
+
+    }
 }

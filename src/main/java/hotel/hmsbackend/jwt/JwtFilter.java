@@ -12,19 +12,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.security.Security;
-
 @Component
 public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private JWTUtils jwtUtils;
     @Autowired
     CustomerUserDetailsSerivce serivce;
-
     Claims claims =null;
     private String username = null;
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain)
+            throws ServletException, IOException {
     if(httpServletRequest.getServletPath().matches("hms/login | hms/signup | hms/forgetpassword")){
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }else {
@@ -38,19 +36,18 @@ public class JwtFilter extends OncePerRequestFilter {
         if (username!=null && SecurityContextHolder.getContext().getAuthentication()==null){
             UserDetails userDetails=serivce.loadUserByUsername(username);
             if (jwtUtils.validateToken(token,userDetails)){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =new UsernamePasswordAuthenticationToken(userDetails,
+                        null,userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
-
     }
     public boolean isAdmin(){
         return "admin".equalsIgnoreCase((String) claims.get("role"));
     }
-
     public boolean isUser(){
         return "user".equalsIgnoreCase((String) claims.get("role"));
     }

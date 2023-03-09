@@ -26,6 +26,8 @@ public class CustomerUserDetailsSerivce implements UserDetailsService {
         }
     }
     public hotel.hmsbackend.pojo.User getUserDetail() {
+//        hotel.hmsbackend.pojo.User user = userDetail;
+//        user.setPassword(null);
         return userDetail;
     }
 }
